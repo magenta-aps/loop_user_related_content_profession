@@ -12,7 +12,7 @@ function loop_user_related_content_profession_views_default_views() {
 
   $view = new view();
   $view->name = 'loop_questions_by_user_profession';
-  $view->description = 'List of questions based on users professions';
+  $view->description = 'List of questions based on users competences';
   $view->tag = 'default';
   $view->base_table = 'users';
   $view->human_name = 'Loop questions by user profession';
@@ -23,24 +23,26 @@ function loop_user_related_content_profession_views_default_views() {
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
   $handler->display->display_options['use_more_always'] = FALSE;
+  $handler->display->display_options['use_more_text'] = 'mere';
   $handler->display->display_options['group_by'] = TRUE;
   $handler->display->display_options['access']['type'] = 'perm';
   $handler->display->display_options['access']['perm'] = 'access user profiles';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
   $handler->display->display_options['exposed_form']['type'] = 'basic';
-  $handler->display->display_options['pager']['type'] = 'full';
+  $handler->display->display_options['exposed_form']['options']['submit_button'] = 'Udfør';
+  $handler->display->display_options['exposed_form']['options']['reset_button_label'] = 'Gendan';
+  $handler->display->display_options['exposed_form']['options']['exposed_sorts_label'] = 'Sortér efter';
+  $handler->display->display_options['exposed_form']['options']['sort_asc_label'] = 'Stigende';
+  $handler->display->display_options['exposed_form']['options']['sort_desc_label'] = 'Faldende';
+  $handler->display->display_options['pager']['type'] = 'some';
+  $handler->display->display_options['pager']['options']['items_per_page'] = '5';
+  $handler->display->display_options['pager']['options']['offset'] = '0';
   $handler->display->display_options['style_plugin'] = 'default';
   $handler->display->display_options['style_options']['row_class'] = 'block-questions--item';
   $handler->display->display_options['style_options']['default_row_class'] = FALSE;
   $handler->display->display_options['style_options']['row_class_special'] = FALSE;
   $handler->display->display_options['row_plugin'] = 'fields';
-  /* No results behavior: Global: View area */
-  $handler->display->display_options['empty']['view']['id'] = 'view';
-  $handler->display->display_options['empty']['view']['table'] = 'views';
-  $handler->display->display_options['empty']['view']['field'] = 'view';
-  $handler->display->display_options['empty']['view']['empty'] = TRUE;
-  $handler->display->display_options['empty']['view']['view_to_insert'] = 'loop_questions_by_user_profession:panel_pane_2';
   /* Relationship: Field: Profession (field_profession) */
   $handler->display->display_options['relationships']['field_profession_tid']['id'] = 'field_profession_tid';
   $handler->display->display_options['relationships']['field_profession_tid']['table'] = 'field_data_field_profession';
@@ -68,6 +70,16 @@ function loop_user_related_content_profession_views_default_views() {
   $handler->display->display_options['relationships']['flag_count_rel']['relationship'] = 'cid';
   $handler->display->display_options['relationships']['flag_count_rel']['required'] = 0;
   $handler->display->display_options['relationships']['flag_count_rel']['flag'] = 'ranking';
+  /* Field: Field: Profession */
+  $handler->display->display_options['fields']['field_profession']['id'] = 'field_profession';
+  $handler->display->display_options['fields']['field_profession']['table'] = 'field_data_field_profession';
+  $handler->display->display_options['fields']['field_profession']['field'] = 'field_profession';
+  $handler->display->display_options['fields']['field_profession']['label'] = 'Excluded - used for templates';
+  $handler->display->display_options['fields']['field_profession']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_profession']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_profession']['type'] = 'taxonomy_term_reference_plain';
+  $handler->display->display_options['fields']['field_profession']['group_column'] = 'entity_id';
+  $handler->display->display_options['fields']['field_profession']['delta_offset'] = '0';
   /* Field: Content: Author uid */
   $handler->display->display_options['fields']['uid']['id'] = 'uid';
   $handler->display->display_options['fields']['uid']['table'] = 'node';
@@ -118,15 +130,19 @@ function loop_user_related_content_profession_views_default_views() {
   $handler->display->display_options['fields']['field_last_name']['relationship'] = 'uid';
   $handler->display->display_options['fields']['field_last_name']['label'] = 'excluded';
   $handler->display->display_options['fields']['field_last_name']['exclude'] = TRUE;
-  /* Field: User: Picture */
-  $handler->display->display_options['fields']['picture']['id'] = 'picture';
-  $handler->display->display_options['fields']['picture']['table'] = 'users';
-  $handler->display->display_options['fields']['picture']['field'] = 'picture';
-  $handler->display->display_options['fields']['picture']['relationship'] = 'uid';
-  $handler->display->display_options['fields']['picture']['label'] = 'excluded';
-  $handler->display->display_options['fields']['picture']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['picture']['link_photo_to_profile'] = FALSE;
-  $handler->display->display_options['fields']['picture']['image_style'] = 'profile';
+  /* Field: User: User image */
+  $handler->display->display_options['fields']['field_user_image']['id'] = 'field_user_image';
+  $handler->display->display_options['fields']['field_user_image']['table'] = 'field_data_field_user_image';
+  $handler->display->display_options['fields']['field_user_image']['field'] = 'field_user_image';
+  $handler->display->display_options['fields']['field_user_image']['relationship'] = 'uid';
+  $handler->display->display_options['fields']['field_user_image']['label'] = 'excluded';
+  $handler->display->display_options['fields']['field_user_image']['exclude'] = TRUE;
+  $handler->display->display_options['fields']['field_user_image']['click_sort_column'] = 'fid';
+  $handler->display->display_options['fields']['field_user_image']['settings'] = array(
+    'image_style' => 'preview',
+    'image_link' => '',
+  );
+  $handler->display->display_options['fields']['field_user_image']['group_column'] = 'entity_id';
   /* Field: Global: Custom text */
   $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
   $handler->display->display_options['fields']['nothing']['table'] = 'views';
@@ -134,7 +150,7 @@ function loop_user_related_content_profession_views_default_views() {
   $handler->display->display_options['fields']['nothing']['label'] = '';
   $handler->display->display_options['fields']['nothing']['alter']['text'] = '<div class="meta-data--author">
 <div class="meta-data--author-image">
-<a href="/user/[uid]">[picture]</a>
+<a href="/user/[uid]">[field_user_image]</a>
 </div>
 <div class="meta-data--author-wrapper">
 <a class="meta-data--author-link" href="/user/[uid]">[field_first_name] [field_last_name]</a>
@@ -155,7 +171,6 @@ function loop_user_related_content_profession_views_default_views() {
   $handler->display->display_options['fields']['comment_body']['relationship'] = 'cid';
   $handler->display->display_options['fields']['comment_body']['label'] = 'excluded - used to group results with multiple comments';
   $handler->display->display_options['fields']['comment_body']['exclude'] = TRUE;
-  $handler->display->display_options['fields']['comment_body']['group_column'] = 'format';
   $handler->display->display_options['fields']['comment_body']['group_columns'] = array(
     'format' => 'format',
   );
@@ -169,6 +184,7 @@ function loop_user_related_content_profession_views_default_views() {
   $handler->display->display_options['arguments']['uid']['table'] = 'users';
   $handler->display->display_options['arguments']['uid']['field'] = 'uid';
   $handler->display->display_options['arguments']['uid']['default_action'] = 'default';
+  $handler->display->display_options['arguments']['uid']['exception']['title'] = 'Alle';
   $handler->display->display_options['arguments']['uid']['default_argument_type'] = 'current_user';
   $handler->display->display_options['arguments']['uid']['summary']['number_of_records'] = '0';
   $handler->display->display_options['arguments']['uid']['summary']['format'] = 'default_summary';
@@ -189,12 +205,26 @@ function loop_user_related_content_profession_views_default_views() {
   $handler->display->display_options['filters']['count']['group_type'] = 'count';
   $handler->display->display_options['filters']['count']['value']['value'] = '0';
   $handler->display->display_options['filters']['count']['group'] = 1;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['relationship'] = 'reverse_field_profession_node';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'post' => 'post',
+  );
+  /* Filter criterion: Content: Comment count */
+  $handler->display->display_options['filters']['comment_count']['id'] = 'comment_count';
+  $handler->display->display_options['filters']['comment_count']['table'] = 'node_comment_statistics';
+  $handler->display->display_options['filters']['comment_count']['field'] = 'comment_count';
+  $handler->display->display_options['filters']['comment_count']['relationship'] = 'reverse_field_profession_node';
+  $handler->display->display_options['filters']['comment_count']['value']['value'] = '0';
 
   /* Display: Content pane */
   $handler = $view->new_display('panel_pane', 'Content pane', 'panel_pane_1');
 
-  /* Display: When empty */
-  $handler = $view->new_display('panel_pane', 'When empty', 'panel_pane_2');
+  /* Display: When empty (unused) */
+  $handler = $view->new_display('panel_pane', 'When empty (unused)', 'panel_pane_2');
   $handler->display->display_options['defaults']['empty'] = FALSE;
   /* No results behavior: Global: Text area */
   $handler->display->display_options['empty']['area']['id'] = 'area';
@@ -213,45 +243,13 @@ function loop_user_related_content_profession_views_default_views() {
   $handler->display->display_options['filters']['status']['value'] = '1';
   $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
-  $translatables['loop_questions_by_user_profession'] = array(
-    t('Master'),
-    t('more'),
-    t('Apply'),
-    t('Reset'),
-    t('Sort by'),
-    t('Asc'),
-    t('Desc'),
-    t('Items per page'),
-    t('- All -'),
-    t('Offset'),
-    t('« first'),
-    t('‹ previous'),
-    t('next ›'),
-    t('last »'),
-    t('term from field_profession'),
-    t('field_profession'),
-    t('author'),
-    t('Comments'),
-    t('counter'),
-    t('excluded'),
-    t('Name'),
-    t('<div class="meta-data--author">
-<div class="meta-data--author-image">
-<a href="/user/[uid]">[picture]</a>
-</div>
-<div class="meta-data--author-wrapper">
-<a class="meta-data--author-link" href="/user/[uid]">[field_first_name] [field_last_name]</a>
-<span class="meta-data--author-title">[field_job_title]</span>
-</div>
-</div>
-<span class="meta-data--date">[created]</span>
-[title]'),
-    t('excluded - used to group results with multiple comments'),
-    t('All'),
-    t('Content pane'),
-    t('View panes'),
-    t('When empty'),
-    t('No content related to your profession'),
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['relationship'] = 'reverse_field_profession_node';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'post' => 'post',
   );
   $export['loop_questions_by_user_profession'] = $view;
 
